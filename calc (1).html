@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style type="text/css">
+	html
+    {
+        background-color:white;
+    }
+    body
+    {
+        width:550px;
+        font-family:Verdana;
+    }
+</style>
+<script type="text/javascript">
+function updateOutput() {
+//calculate
+	var form = document.getElementById("crispercalc");
+	var table = document.getElementById("vxtable");
+	var output_x = form.elements["outputX"];
+	var v_sum = form.elements["vSum"];
+	var v_250 = form.elements["v_250"];
+	var v_ddh20 = form.elements["v_ddh20"];
+	var v_250_value = 250/parseFloat(form.elements["input_p"].value);
+	v_250.value = v_250_value.toFixed(3);
+	
+	var x = 0;
+	for (var i = 1; i < table.rows[0].cells.length; i ++)
+	{
+		x += parseFloat(table.rows[2].cells[i].firstChild.value) * 
+			parseFloat(table.rows[3].cells[i].firstChild.value);
+	}
+	x = 2000/x;
+	output_x.value = x.toFixed(3);;
+	var v_sum_value = 0;
+	for (var i = 1; i < table.rows[0].cells.length; i ++)
+	{
+		var mx = 
+			parseFloat(table.rows[2].cells[i].firstChild.value) * 
+			parseFloat(table.rows[3].cells[i].firstChild.value) * 
+			x;
+		table.rows[5].cells[i].firstChild.value = mx.toFixed(3);
+		
+		if (parseFloat(table.rows[2].cells[i].firstChild.value) != 0)
+		{
+			var vx = mx / parseFloat(table.rows[1].cells[i].firstChild.value);
+			table.rows[6].cells[i].firstChild.value = vx.toFixed(3);;
+			v_sum_value += vx;
+		}
+	}
+	v_sum.value = v_sum_value.toFixed(3);
+	v_ddh20.value = (50 - v_250_value - v_sum_value).toFixed(3);
+}
+</script>
+</head>
+<body onload="updateOutput()">
+<form id="crispercalc" oninput="updateOutput()">
+<table id="vxtable" class="table table-sm table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">2000 ng DNA Inserts</th>
+      <th scope="col">up</th>
+      <th scope="col">dn</th>
+      <th scope="col">promoter</th>
+	  <th scope="col">terminator</th>
+	  <th scope="col">target gene 1</th>
+	  <th scope="col">target gene 2</th>
+	  <th scope="col">target gene 3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="table-active">
+      <th scope="row">输入p：密度</th>
+      <td><input name="p1" type="text" size="8" value="218.8"></td>
+      <td><input name="p2" type="text" size="8" value="240"></td>
+      <td><input name="p3" type="text" size="8" value="145.1"></td>
+	  <td><input name="p4" type="text" size="8" value="49.7"></td>
+	  <td><input name="p5" type="text" size="8" value="165.1"></td>
+	  <td><input name="p6" type="text" size="8" value="0"></td>
+	  <td><input name="p7" type="text" size="8" value="0"></td>
+    </tr>
+    <tr class="table-active">
+      <th scope="row">输入Mx：bp数</th>
+      <td><input name="mx1" type="text" size="8" value="1000"></td>
+      <td><input name="mx2" type="text" size="8" value="1000"></td>
+      <td><input name="mx3" type="text" size="8" value="600"></td>
+	  <td><input name="mx4" type="text" size="8" value="250"></td>
+	  <td><input name="mx5" type="text" size="8" value="489"></td>
+	  <td><input name="mx6" type="text" size="8" value="0"></td>
+	  <td><input name="mx7" type="text" size="8" value="0"></td>
+    </tr>
+    <tr class="table-active">
+      <th scope="row">输入nx：摩尔比（默认为1）</th>
+      <td><input name="nx1" type="text" size="8" value="1"></td>
+      <td><input name="nx2" type="text" size="8" value="1"></td>
+      <td><input name="nx3" type="text" size="8" value="1"></td>
+	  <td><input name="nx4" type="text" size="8" value="1"></td>
+	  <td><input name="nx5" type="text" size="8" value="1"></td>
+	  <td><input name="nx6" type="text" size="8" value="1"></td>
+	  <td><input name="nx7" type="text" size="8" value="1"></td>
+    </tr>
+	<tr class="table-info">
+      <th scope="row">输出X：质量系数= 2000ng/(M1*n1+M2*n2+...+M5*n5)</th>
+      <td colspan="7"><output name="outputX">0.599</output></td>
+    </tr>
+	<tr class="table-info">
+      <th scope="row">输出mx：质量=nx*Mx*X</th>
+      <td><output name="outputMx1">598.982</output></td>
+	  <td><output name="outputMx2">598.982</output></td>
+	  <td><output name="outputMx3">359.389</output></td>
+	  <td><output name="outputMx4">149.745</output></td>
+	  <td><output name="outputMx5">292.902</output></td>
+	  <td><output name="outputMx6">0.000</output></td>
+	  <td><output name="outputMx7">0.000</output></td>
+    </tr>
+	<tr class="table-info">
+      <th scope="row">输出Vx：体积=m/p</th>
+      <td><output name="outputVx1">2.738</output></td>
+	  <td><output name="outputVx2">2.496</output></td>
+	  <td><output name="outputVx3">2.477</output></td>
+	  <td><output name="outputVx4">3.013</output></td>
+	  <td><output name="outputVx5">1.774</output></td>
+	  <td><output name="outputVx6"></output></td>
+	  <td><output name="outputVx7"></output></td>
+    </tr>
+	<tr class="table-info">
+      <th scope="row">输出总体积V-SUM</th>
+      <td colspan="7"><output name="vSum">12.497</output></td>
+    </tr>
+	<tr>
+      <th scope="col">250 ng pCUT</th>
+	  <th scope="col"></th>
+    </tr>
+    <tr class="table-active">
+      <th scope="row">输入p：密度</th>
+      <td><input name="input_p" type="text" size="8" value="292.3"></td>
+    </tr>
+	<tr class="table-info">
+      <th scope="row">输出V：体积</th>
+      <td><output name="v_250">0.855</output></td>
+    </tr>
+	<tr>
+      <th scope="col">ddH2O（配平至到 50µl）</th>
+	  <th scope="col"></th>
+    </tr>
+	<tr class="table-info">
+      <th scope="row">输出V-ddH2O=50-V(pCUT)-V(DNA inserts)</th>
+      <td><output name="v_ddh20">36.647</output></td>
+    </tr>
+  </tbody>
+</table>
+</form>
+
+</body></html>
